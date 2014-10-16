@@ -5,7 +5,10 @@ import testdata.Data;
 
 public class BubbleSorting {
 	
-	public final static int[] SORT_ARRAY = new int[] {22, 97, 35, 19, 20, 10, 9, 3, 39, 56, 88, 19};
+	
+	public final static int[] SORT_ARRAY = new int[] {22, 97, 35, 19, 20, 10, 9, 3, 39, 56, 88, 19, 2, 21};
+	
+	public final static String[][] SCORE_ARRAY = new String[][]{{"John", "3"}, {"Smith", "7"}, {"Turn", "9"}, {"Tay", "2"}, {"Allen", "3"}, {"Joe", "8"}};
 	
 	public final static int[] FIBONACCI_ARRAY = new int[] {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144};
 	
@@ -16,6 +19,13 @@ public class BubbleSorting {
 			}
 			System.out.println("");
 		}
+	}
+	
+	public static void printArray(int[] array, int length) {
+			for (int i = 0; i < length; i ++) {
+				System.out.print(array[i] + ", ");
+			}
+			System.out.println("");
 	}
 	
 	/**
@@ -159,12 +169,14 @@ public class BubbleSorting {
 		System.out.println("CommonValues time elapsed: " + (end - start));
 	}
 	
-	public static void compareCommonValuesWithSorting(int[] array1, int[] array2, boolean printArray) {
+	public static void compareCommonValuesWithSorting(int[] array1, int[] array2) {
 		long start = System.currentTimeMillis();
 		int array[] = new int[array1.length < array2.length ? array1.length : array2.length];
 		int i = 0, j = 0, r = 0;
 		mergeSortInner(array1, 0, array1.length - 1);
 		mergeSortInner(array2, 0, array2.length - 1);
+		printArray(array1, true);
+		printArray(array2, true);
 		for (; i < array1.length; i ++) {
 			for (; j < array2.length; ) {
 				if (array1[i] == array2[j]) {
@@ -178,21 +190,78 @@ public class BubbleSorting {
 			}
 		}
 		long end = System.currentTimeMillis();
-		printArray(array, printArray);
+		printArray(array, r);
 		System.out.println("CommonValuesWithSorting time elapsed: " + (end - start));
 	}
 	
-	public static void sortingCommonValues(int[] array1, int[] array2, boolean printArray) {
+	/**
+	 * {22, 97, 35, 19, 20, 10, 9, 3, 39, 56, 88, 19, 2, 21}
+	 * @param array
+	 * @param left
+	 * @param right
+	 */
+	public static void quickSorting(int array[], int left, int right) {
+		if (left < right) {
+			int i = left, j = right, x = array[left];
+			while (i < j) {
+				while (i < j && array[j] >= x) { j--; }
+				if (i < j) { array[i++] = array[j]; }
+				while (i < j && array[i] < x) { i++; }
+				if (i < j) { array[j--] = array[i]; }
+				printArray(array, true);
+			}
+			array[i] = x;
+			quickSorting(array, left, i - 1);
+			quickSorting(array, i + 1, right);
+		}
+	}
+	
+	public static void quickSortWithTimeElapse(int array[], boolean printArray) {
 		long start = System.currentTimeMillis();
-		
+		quickSorting(array, 0, array.length - 1);
+		long end = System.currentTimeMillis();
+		printArray(array, printArray);
+		System.out.println("quickSorting time elapsed: " + (end - start));
+	}
+	
+	public static void sortScore(String array[][], int left, int right) {
+		if (left < right) {
+			int i = left, j = right;
+			String[] x = array[left];
+			while (i < j) {
+				while (i < j && ((array[j][1].compareTo(x[1])) > 0 || (array[j][1].compareTo(x[1]) == 0 && array[j][0].compareTo(x[0]) <= 0))) {
+					j --;
+				}
+				if (i < j) {
+					array[i] = array[j];
+					i ++;
+				}
+				while (i < j && ((array[i][1].compareTo(x[1]) < 0 || (array[i][1].compareTo(x[1]) == 0 && array[i][0].compareTo(x[0])>= 0)))) {
+					i ++;
+				}
+				if (i < j) {
+					array[j] = array[i];
+					j --;
+				}
+			}
+			array[i] = x;
+			sortScore(array, left, i -1);
+			sortScore(array, i + 1, right);
+		}
 	}
 	
 	public static void main(String args[]) {
-		bubbleSorting(Data.SORT_TEST_ARRAY, false);
-		bubbleSortingEnhanced(Data.SORT_TEST_ARRAY, false);
-		insertionSorting(Data.SORT_TEST_ARRAY, false);
-		mergeSorting(Data.SORT_TEST_ARRAY, false);
+//		bubbleSorting(Data.SORT_TEST_ARRAY, false);
+//		bubbleSortingEnhanced(Data.SORT_TEST_ARRAY, false);
+//		insertionSorting(Data.SORT_TEST_ARRAY, false);
+//		mergeSorting(Data.SORT_TEST_ARRAY, false);
+//		quickSortWithTimeElapse(SORT_ARRAY, true);
+		//compareCommonValuesWithSorting(SORT_ARRAY, FIBONACCI_ARRAY);
 		//System.out.println("Fibonacci, input: 11: result: " + fibonacci(11));
+		sortScore(SCORE_ARRAY, 0, SCORE_ARRAY.length - 1);
+		for (int i = SCORE_ARRAY.length - 1; i >= 0; i --) {
+			System.out.println(SCORE_ARRAY[i][0] + " : " + SCORE_ARRAY[i][1]);
+		}
 	}
 	
 	
