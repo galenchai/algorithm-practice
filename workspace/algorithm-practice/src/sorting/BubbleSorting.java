@@ -1,6 +1,7 @@
 package sorting;
 
-import testdata.Data;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class BubbleSorting {
@@ -85,12 +86,26 @@ public class BubbleSorting {
 		
 	}
 	
-	public static int fibonacci(int seq) {
-		if (1 == seq || 2 == seq) {
-			return 1;
-		} else {
-			return fibonacci(seq - 1) + fibonacci(seq - 2);
+	public static int fibonacci(int seq, Map map) {
+		if (map.containsKey(seq)) {
+			return (Integer) map.get(seq);
 		}
+		int value = fibonacci(seq - 1, map) + fibonacci(seq - 2, map);
+		map.put(seq, value);
+		return value;
+	}
+	
+	/**
+	 * Classic dynamic programming algorithm:
+	 * Compute the sub questions and merge them
+	 * @param seq
+	 * @return
+	 */
+	public static int optFib(int seq) {
+		Map map = new HashMap();
+		map.put(0, 1);
+		map.put(1, 1);
+		return fibonacci(seq, map);
 	}
 	
 	public static void insertionSorting(int[] array, boolean printArray) {
@@ -250,6 +265,41 @@ public class BubbleSorting {
 		}
 	}
 	
+	/*
+	 * Backtracking algorithm:
+	 * Try and if not satisfied then go back and try another way 
+	 */
+	public static void queen() {
+		
+	}
+	
+	private boolean queenCheck(int row, int column) {
+		if (1 == row) {
+			return true;
+		}
+		int i, j;
+		for (i = 0; i < row - 1; i ++) {
+			
+		}
+		return false;
+	}
+	
+	/**
+	 * Greedy algorithm:
+	 * Get the best solution for each sub question and merge them
+	 */
+	public static void change(int[] changeVals, int sum) { //the array needs to be sorted
+		int k = changeVals.length;
+		int[] num = new int[k];
+		for (int i = 0; i < k; i ++) {
+			num[i] = sum/changeVals[i];
+			sum = sum % changeVals[i];
+		}
+		for (int i = 0; i < num.length; i ++) {
+			System.out.println(num[i]);
+		}
+	}
+	
 	public static void main(String args[]) {
 //		bubbleSorting(Data.SORT_TEST_ARRAY, false);
 //		bubbleSortingEnhanced(Data.SORT_TEST_ARRAY, false);
@@ -258,11 +308,13 @@ public class BubbleSorting {
 //		quickSortWithTimeElapse(SORT_ARRAY, true);
 		//compareCommonValuesWithSorting(SORT_ARRAY, FIBONACCI_ARRAY);
 		//System.out.println("Fibonacci, input: 11: result: " + fibonacci(11));
-		sortScore(SCORE_ARRAY, 0, SCORE_ARRAY.length - 1);
-		for (int i = SCORE_ARRAY.length - 1; i >= 0; i --) {
-			System.out.println(SCORE_ARRAY[i][0] + " : " + SCORE_ARRAY[i][1]);
-		}
+//		sortScore(SCORE_ARRAY, 0, SCORE_ARRAY.length - 1);
+//		for (int i = SCORE_ARRAY.length - 1; i >= 0; i --) {
+//			System.out.println(SCORE_ARRAY[i][0] + " : " + SCORE_ARRAY[i][1]);
+//		}
+		change(new int[]{25, 10, 5, 1}, 99);
 	}
+	
 	
 	
 }
